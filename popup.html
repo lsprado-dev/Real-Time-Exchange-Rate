@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotação de Moedas</title>
+    <style>
+        /* TEMA PREMIUM - MINIMALISTA FINTECH */
+        :root {
+            --primary: #4F46E5; /* Índigo Premium */
+            --primary-light: #EEF2FF;
+            --bg-gradient: linear-gradient(135deg, #F4F7F9 0%, #E8EDF2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border-light: rgba(255, 255, 255, 0.8);
+            --border-dark: rgba(0, 0, 0, 0.04);
+            --success: #10B981;
+            --danger: #EF4444;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        /* =========================================
+           PERSONALIZAÇÃO DA BARRA DE ROLAGEM 
+           ========================================= */
+        ::-webkit-scrollbar {
+            width: 6px; 
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.3); 
+            border-radius: 10px; 
+            transition: background 0.2s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(79, 70, 229, 0.8); 
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            padding: 24px 20px 60px 20px; 
+            width: 360px;
+            min-height: 590px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* HEADER */
+        .header { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            width: 100%; 
+            animation: fadeDown 0.5s ease; 
+        }
+        
+        /* AQUI ESTÁ A MUDANÇA: APENAS O TÍTULO EM AZUL */
+        h1 { 
+            font-size: 22px; 
+            font-weight: 800; 
+            color: var(--primary); /* Azul Índigo */
+            letter-spacing: -0.5px; 
+            margin-bottom: 4px; 
+        }
+        
+        p.subtitle { 
+            font-size: 13px; 
+            color: var(--text-muted); 
+            font-weight: 500; 
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* GRID DE BOTÕES */
+        .buttons {
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px;
+            width: 100%; 
+            margin-bottom: 24px; 
+            animation: fadeIn 0.6s ease;
+        }
+
+        .buttons button {
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 6px;
+            padding: 8px; 
+            font-size: 13px; 
+            font-weight: 600;
+            background-color: #FFFFFF; 
+            color: var(--text-muted);
+            border: 1px solid var(--border-dark); 
+            border-radius: 14px;
+            cursor: pointer; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            height: 44px;
+        }
+
+        .buttons button img { 
+            width: 18px; 
+            height: 18px; 
+            object-fit: contain; 
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.05)); 
+            transition: filter 0.25s ease; 
+        }
+        
+        .buttons button:hover {
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+        
+        /* Botão Ativo */
+        .buttons button.active {
+            background-color: var(--primary-light);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            color: var(--primary);
+            box-shadow: 0 6px 12px rgba(79, 70, 229, 0.1);
+        }
+
+        .buttons button.active img {
+            filter: invert(26%) sepia(90%) saturate(3268%) hue-rotate(234deg) brightness(96%) contrast(92%);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* CARD PRINCIPAL (Vidro Limpo) */
+        .values-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 24px 20px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(12px);
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .values-header {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center; 
+            gap: 8px; 
+            min-height: 80px; 
+            margin-bottom: 16px;
+        }
+
+        #dollar-value {
+            font-size: 34px; 
+            font-weight: 800; 
+            color: var(--text-main);
+            letter-spacing: -1.5px; 
+            margin: 0; 
+            line-height: 1;
+            transition: opacity 0.3s ease; 
+            word-break: break-word;
+        }
+
+        #percentage-change {
+            font-size: 13px; 
+            font-weight: 700; 
+            padding: 4px 10px;
+            border-radius: 20px; 
+            margin: 0; 
+            display: inline-block; 
+        }
+
+        /* CONVERSOR SUTIL */
+        .converter-box {
+            margin-top: 16px; 
+            background-color: rgba(248, 250, 252, 0.6); 
+            padding: 8px; 
+            border-radius: 16px; 
+            border: 1px solid var(--border-dark);
+        }
+        
+        .input-row {
+            display: flex; 
+            align-items: center; 
+            background-color: transparent;
+            border-radius: 12px; 
+            margin-bottom: 4px; 
+            overflow: hidden;
+            border: 1px solid transparent; 
+            transition: all 0.2s ease;
+        }
+
+        .input-row:last-child { 
+            margin-bottom: 0; 
+        }
+        
+        .input-row:focus-within {
+            background-color: #FFFFFF;
+            border-color: rgba(79, 70, 229, 0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        
+        .currency-label {
+            padding: 0 16px; 
+            font-weight: 700; 
+            color: var(--text-muted);
+            height: 48px; 
+            line-height: 48px; 
+            width: 70px; 
+            text-align: left; 
+            font-size: 14px; 
+        }
+        
+        .input-row input {
+            flex: 1; 
+            height: 48px; 
+            border: none; 
+            padding: 0 16px 0 0; 
+            font-size: 18px;
+            font-weight: 700; 
+            color: var(--text-main); 
+            outline: none; 
+            background: transparent; 
+            width: 100%; 
+            text-align: right; 
+            letter-spacing: -0.5px;
+        }
+
+        .input-row input::placeholder { 
+            color: #CBD5E1; 
+            font-weight: 500; 
+        }
+
+        /* MÁXIMA E MÍNIMA (Elegantes) */
+        .best-worst { 
+            display: flex; 
+            justify-content: space-between; 
+            gap: 12px; 
+            width: 100%; 
+        }
+        
+        .stat-box {
+            flex: 1; 
+            background-color: var(--card-bg); 
+            padding: 14px 12px;
+            border-radius: 16px; 
+            border: 1px solid var(--border-light);
+            text-align: center; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            backdrop-filter: blur(5px); 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4px;
+        }
+        
+        .stat-header {
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 6px;
+        }
+        
+        .dot { 
+            width: 6px; 
+            height: 6px; 
+            border-radius: 50%; 
+        }
+
+        .dot.red { 
+            background-color: var(--danger); 
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); 
+        }
+
+        .dot.green { 
+            background-color: var(--success); 
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); 
+        }
+
+        .stat-box span { 
+            font-size: 10px; 
+            color: var(--text-muted); 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+
+        .stat-box strong { 
+            font-size: 15px; 
+            font-weight: 700; 
+            color: var(--text-main); 
+            letter-spacing: -0.5px; 
+        }
+
+        /* FOOTER & CREDITOS (NOVO) */
+        footer { 
+            font-size: 12px; 
+            text-align: center; 
+            margin-top: auto; 
+            padding-top: 16px; 
+            padding-bottom: 10px; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rate-link { 
+            color: var(--primary); 
+            text-decoration: none; 
+            font-weight: 700; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 6px;
+            background: var(--primary-light); 
+            padding: 10px 18px;
+            border-radius: 14px;
+            margin: 0 auto;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rate-link:hover { 
+            background: rgba(79, 70, 229, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+        
+        .credits { 
+            font-size: 11px; 
+            color: #64748B; 
+            font-weight: 500; 
+            line-height: 1.5; 
+        }
+
+        .credits strong { 
+            color: #0F172A;
+            font-weight: 700; 
+        }
+
+        .pix-container {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-dark); 
+        }
+
+        .pix-text {
+            display: block;
+            margin-bottom: 4px;
+            color: #475569;
+        }
+
+        .pix-key {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-main);
+            background: #E2E8F0; 
+            border: 1px solid #CBD5E1;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: copy; 
+            letter-spacing: 0.3px;
+            transition: background 0.2s ease;
+        }
+
+        .pix-key:hover {
+            background: #CBD5E1;
+        }
+
+        /* O truque de selecionar tudo fica SÓ no email agora */
+        .pix-email {
+            user-select: all; 
+        }
+
+        /* BOTOES FLUTUANTES UNIFICADOS */
+        .float-btn {
+            position: fixed; 
+            bottom: 15px;
+            background-color: var(--text-main);
+            border: none;
+            border-radius: 50%;
+            width: 40px; 
+            height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+        
+        .float-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            background-color: var(--primary);
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+        }
+        
+        .float-btn img {
+            width: 18px; 
+            height: 18px;
+            filter: brightness(0) invert(1);
+            opacity: 1; 
+            transition: transform 0.2s ease;
+        }
+        
+        .float-btn:hover img {
+            transform: scale(1.1);
+        }
+        
+        #coffee-button { 
+            left: 15px; 
+        }
+        
+        #share-button { 
+            right: 15px; 
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            visibility: hidden; 
+            min-width: 200px; 
+            background-color: var(--text-main);
+            color: #fff; 
+            text-align: center; 
+            border-radius: 30px; 
+            padding: 12px 20px;
+            position: fixed; 
+            z-index: 1000; 
+            left: 50%; 
+            transform: translateX(-50%);
+            bottom: 30px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0; 
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .toast.show { 
+            visibility: visible; 
+            opacity: 1; 
+            bottom: 80px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Câmbio em Tempo Real</h1>
+        <p class="subtitle">Selecione uma moeda para ver a cotação</p>
+    </div>
+    
+    <div class="buttons">
+        <button id="usd"><img src="icons/usd.png" alt="USD">USD</button>
+        <button id="eur"><img src="icons/eur.png" alt="EUR">EUR</button>
+        <button id="gbp"><img src="icons/gbp.png" alt="GBP">GBP</button>
+        <button id="inr"><img src="icons/inr.png" alt="INR">INR</button>
+        <button id="chf"><img src="icons/chf.png" alt="CHF">CHF</button>
+        <button id="btc"><img src="icons/btc.png" alt="BTC">BTC</button>
+        <button id="jpy"><img src="icons/jpy.png" alt="JPY">JPY</button>
+        <button id="aud"><img src="icons/aud.png" alt="AUD">AUD</button>
+        <button id="cad"><img src="icons/cad.png" alt="CAD">CAD</button>
+        <button id="pln"><img src="icons/pln.png" alt="PLN">PLN</button>
+        <button id="ars"><img src="icons/ars.png" alt="ARS">ARS</button>
+        <button id="sek"><img src="icons/sek.png" alt="SEK">SEK</button>
+    </div>
+
+    <div class="values-card">
+        <div class="values-header">
+            <div id="dollar-value">--</div>
+            <span id="percentage-change"></span>
+        </div>
+        
+        <div class="converter-box">
+            <div class="input-row">
+                <span class="currency-label" id="lbl-foreign">USD</span>
+                <input type="text" inputmode="decimal" id="input-foreign" placeholder="1,00">
+            </div>
+            <div class="input-row">
+                <span class="currency-label">BRL</span>
+                <input type="text" inputmode="decimal" id="input-brl" placeholder="0,00">
+            </div>
+        </div>
+    </div>
+
+    <div class="best-worst">
+        <div class="stat-box">
+            <div class="stat-header">
+                <div class="dot red"></div>
+                <span>Menor Hoje</span>
+            </div>
+            <strong id="best-value">...</strong>
+        </div>
+        <div class="stat-box">
+            <div class="stat-header">
+                <div class="dot green"></div>
+                <span>Maior Hoje</span>
+            </div>
+            <strong id="worst-value">...</strong>
+        </div>
+    </div>
+
+    <footer>
+        <a href="https://chromewebstore.google.com/detail/ndkfobfkdpmlmkmnohgeibiaokgbioid/reviews" target="_blank" class="rate-link">
+            ⭐ Avalie a extensão na loja
+        </a>
+        <div class="credits">
+            Desenvolvido por <strong>Lucas Prado</strong>
+            <div class="pix-container">
+                <span class="pix-text">Curtiu a extensão gratuita? Ajude o dev a comprar um Monster</span>
+                <span class="pix-key" id="pix-copy">PIX: <span class="pix-email">lucasprado335@gmail.com</span></span>
+            </div>
+        </div>
+    </footer>
+    
+    <button id="coffee-button" class="float-btn" title="Buy me a coffee"><img src="icons/coffee-cup.png" alt="Café"></button>
+    <button id="share-button" class="float-btn" title="Copiar cotação"><img src="icons/share.png" alt="Copiar"></button>
+
+    <div id="toast-message" class="toast"></div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
