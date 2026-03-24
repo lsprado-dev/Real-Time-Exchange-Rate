@@ -10,6 +10,21 @@
 
 ---
 
+### The Origin Story
+I built this tool to solve my own problem: I couldn't find a currency tracker that was fast, minimalist, and actually kept the data saved without bloated features. What started as a personal optimization script quickly became a public tool after friends and colleagues started asking for it. Built for efficiency, scaled for the public.
+
+---
+
+### 📸 Interface & UX
+
+<p align="center">
+  <img src="https://lh3.googleusercontent.com/Hm6DVMkui3SKTzuXhpALN5pr-UruEOi8gvB3N--ZV977YL7oLwynvCg4RPBM5S-Ni-LCyzCXb2W8X8TY1XYFmreZ=s1280-w1280-h800" alt="Real-Time Exchange Rate Core Interface" width="300" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://lh3.googleusercontent.com/1PyK2gb8mjJuU61qJnKhUIBSnMk3mkFIFDnbRBpVix2hm0HqlEIhMnstlly2h5EgrUmE--WhmtAtjhaheEhouDBe3mk=s1280-w1280-h800" alt="Real-Time Exchange Rate Context Menu Feature" width="300" />
+</p>
+
+---
+
 ### Core Features
 
 #### Intelligent Monitoring
@@ -19,10 +34,17 @@
 #### Advanced Conversion Engine
 - **Selection-to-BRL:** High-performance context menu integration. Select any value on any website to convert it instantly to Brazilian Real (BRL) via a custom styled overlay.
 - **Dual-Stream Input:** Simultaneous conversion between foreign currencies and BRL with support for 8-decimal precision and millisecond response times.
+- **Data Export:** One-click copy function. Instantly copy the current rate, formatted with date and time, straight to your clipboard.
 - **Market Insights:** Track daily High/Low peaks directly within the interface.
 
 #### Supported Assets
 Technical support for major global currencies including **USD, EUR, GBP, BTC, PLN (Złoty)**, and more.
+
+---
+
+### Built With
+
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black&color=531a8c" alt="JavaScript"/></a> <a href="https://developer.chrome.com/docs/extensions/" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/Chrome_Extensions-4285F4?style=flat&logo=google-chrome&logoColor=white&color=531a8c" alt="Chrome Extensions API"/></a> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white&color=531a8c" alt="HTML5"/></a> <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white&color=531a8c" alt="CSS3"/></a>
 
 ---
 
@@ -46,7 +68,7 @@ This repository acts as a **Public Staging and Documentation Mirror**. To protec
 
 ### Professional Insights (v.2026)
 
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=lsprado-dev&theme=calm&hide=C++,PHP&langs_count=6&text_color=A371F7&icon_color=A371F7&title_color=A371F7&bg_color=0D1117&hide_border=true" alt="Lucas Languages" />
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=lsprado-dev&theme=calm&hide=C%2B%2B,PHP&langs_count=6&text_color=A371F7&icon_color=A371F7&title_color=A371F7&bg_color=0D1117&hide_border=true" alt="Lucas Languages" />
 
 ---
 
